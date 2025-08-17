@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hiii!!!ppy Birthday মনা :3!</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.2/p5.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to bottom, #1c2526, #0a0e0f);;
+      color: #e0e0e0;
+      text-align: center;
+      overflow-x: hidden;
+    }
+    header {
+      padding: 20px;
+      height: 100vh;
+      width: 100vw;
+      background: rgba(30, 37, 38, 0.9);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    p {
+      margin: 10px 0;
+      font-size: 1.2em;
+      color: #b0b0b0;
+    }
+    h1 {
+      font-size: 2.5em;
+      color: #ff85c2;
+      margin: 0;
+    }
+    #countdown {
+      font-size: 1.5em;
+      margin: 20px 0;
+      color: #e0e0e0;
+    }
+    #quotes, #message, #product-review, #pixel-runner {
+      margin: 15px auto;
+      max-width: 650px;
+      padding: 20px;
+      background: rgba(30, 37, 38, 0.9);
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    #game {
+      margin: 15px auto;
+      width: 100%;
+      padding: 20px;
+      background-image: url("./assets/komi.png");
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);      
+    }
+    #gallery1, #gallery2 {
+      margin: 15px auto;
+      width: 100%;
+      padding: 20px;
+      background: rgba(30, 37, 38, 0.9);
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    #quotes h2, #message h2, #product-review h2, #game h2, #pixel-runner h2, #gallery1 h2, #gallery2 h2 {
+      color: #ff85c2;
+      cursor: pointer;
+      margin: 0;
+      padding: 10px;
+      transition: color 0.3s;
+    }
+    #quotes h2:hover, #message h2:hover, #product-review h2:hover, #game h2:hover, #pixel-runner h2:hover, #gallery1 h2:hover, #gallery2 h2:hover {
+      color: #ff85c2;
+    }
+    #game-content {
+      display: none;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;      
+    }
+    #quote-content, #message-content, #review-list, #runner-content, #gallery1-content, #gallery2-content {
+      display: none;
+      margin-top: 10px;
+      padding: 10px;
+      background: rgba(40, 40, 40, 0.9);
+      border-radius: 5px;
+      text-align: center;
+    }
+    #quote-text {
+      font-style: italic;
+      font-size: 1.2em;
+      color: #ff85c2;
+    }
+    #quote-button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background: #ff85c2;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    #quote-button:hover {
+      background: #ff85c2;
+    }
+    #message-content p {
+      font-size: 1.1em;
+      color: #e0e0e0;
+      margin: 0;
+    }
+    #review-list ul {
+      list-style-type: none;
+      padding: 0;
+      text-align: left;
+    }
+    #review-list li {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      font-size: 1em;
+      color: #e0e0e0;
+    }
+    #review-list li:last-child {
+      border-bottom: none;
+    }
+    #game-content {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 10px;
+      flex-direction: column;
+      align-items: center;
+    }
+    #canvas-holder-notification {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    #canvas-holder {
+      display: inline-block;
+    }
+    #notification-window {
+      display: inline-block;
+      width: 200px;
+      height: 400px;
+      background: #f0f0f0;
+      border: 2px solid #ff85c2;
+      border-radius: 5px;
+      padding: 10px;
+      overflow-y: auto;
+      text-align: left;
+      font-size: 0.9em;
+      color: #ddd;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .notification {
+      background: rgba(40, 40, 40, 0.9);
+      padding: 8px;
+      margin-bottom: 8px;
+      border-radius: 5px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .notification span {
+      font-size: 0.8em;
+      color: #e0e0e0;
+    }
+    #notification-window::-webkit-scrollbar {
+      width: 8px;
+    }
+    #notification-window::-webkit-scrollbar-track {
+      background: #f0f0f0;
+    }
+    #notification-window::-webkit-scrollbar-thumb {
+      background: #ff85c2;
+      border-radius: 4px;
+    }
+    #score {
+      font-size: 1.2em;
+      color: #e0e0e0;
+      width: 400px;
+      margin: 10px auto;
+    }
+    #hunger-bar, #health-bar, #credits-bar {
+      width: 400px;
+      height: 10px;
+      background: #ccc;
+      margin: 5px auto;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    #hunger-fill {
+      height: 100%;
+      background: #00ff00;
+      width: 75%;
+      transition: width 0.3s;
+    }
+    #health-fill {
+      height: 100%;
+      background: #ff0000;
+      width: 75%;
+      transition: width 0.3s;
+    }
+    #credits-fill {
+      height: 100%;
+      background: #ffd700;
+      width: 35.71%;
+      transition: width 0.3s;
+    }
+    #credits {
+      font-size: 1.2em;
+      color: #e0e0e0;
+      margin-top: 5px;
+    }
+    #artifact-inventory {
+      margin-top: 10px;
+      font-size: 1em;
+      color: #e0e0e0;
+    }
+    canvas {
+      display: block;
+      margin: 10px auto;
+      border: 2px solid #ff85c2;
+      border-radius: 5px;
+    }
+    .balloon {
+      position: absolute;
+      width: 50px;
+      height: 70px;
+      border-radius: 50%;
+      animation: float 5s linear infinite;
+    }
+    @keyframes float {
+      0% { transform: translateY(100vh); }
+      100% { transform: translateY(-100px); }
+    }
+    #error-message {
+      color: red;
+      font-size: 1em;
+      margin-top: 10px;
+    }
+    #restart-button, #restart-balloon-button, #run-balloon-button, #pause-balloon-button, #run-runner-button, #pause-runner-button {
+      margin: 10px 5px;
+      padding: 10px 20px;
+      background: #ff85c2;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    #restart-button:hover, #restart-balloon-button:hover, #run-balloon-button:hover, #pause-balloon-button:hover, #run-runner-button:hover, #pause-runner-button:hover {
+      background: #ff85c2;
+    }
+    #game-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    #gallery1-content, #gallery2-content {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    #gallery1-content img, #gallery2-content img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 5px;
+      border: 2px solid #ff85c2;
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+    #gallery1-content img:hover, #gallery2-content img:hover {
+      transform: scale(1.05);
+    }
+    #image-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    #modal-image {
+      max-width: 80vw;
+      max-height: 80vh;
+      object-fit: contain;
+      border-radius: 10px;
+      border: 2px solid #ff85c2;
+    }
+    #close-modal {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #ff85c2;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    #close-modal:hover {
+      background: #ff85c2;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Hiii!!!ppy Birthday, মনা :3!</h1>
+    <div id="countdown">Counting down to your special day...</div>
+
+  <section id="message">
+    <h2 onclick="toggleSection('message-content')">বাড-ডে উইশ</h2>
+    <p>(আর কিছু random প্যাঁচাল obviously)</p>
+    <div id="message-content">
+      <p>Damn, কত বছর হলো জানি? ২০০৮, ০৯, ১০, ..., ২৪, ২৫ ... ১৭? Damn। এত বড় কবে হলা? কয়েকদিন আগেও তো ওইটুকুনি ছিলে। </p>
+      <p>যাই হোক। Happy Birthday মনা :3 Wishing you very gleaming and shiny days ahead :3 সামনের দিন গুলা তোমার আশা করি অনেক অনেক ভালো যাবে। আর যাবে না-ই বা কীভাবে, আমি থাকবো তো তোমার সাথে 😎. </p>
+      <p>দেখতে দেখতে অনেকগুলো দিন একসাথে চলে গেলো, তাই না? অনেক ভালোবাসি তোমাকে :3</p>
+      <p>তোমার জন্মদিনের জন্য এটা বানালাম। এটা বানানোর plan ছিল না আসলে, হুট করে মাথায় আসলো তাই বানালাম hehe। নিচে দুটা game বানাইসি আমি (জে আফা, আপ্নের জন্য আমার অনেক ত্যাল)। খেলিও সময় পেলে :3 বেশ কিছু easter egg আছে :3 </p>
+      <p>Website বানায় ফেলসি কিন্তু বেশি কিছু দেওয়ার নাই :( আমাদের তো একসাথে তেমন ছবিও নাই :(( আশা করি একদিন অনেকগুলা হবে :3 বড় হই তাড়াতাড়ি :3 </p>
+      <p>I know website টা বেশ খ্যাত হইসে, কিন্তু এর থেকে 2 hour এ বেশি কিছু করার মতো অবস্থা ছিল না, sorry :( এই week টা অনেক প্যারা যাচ্ছে আমার (20+ practical বাকি এখনো)। পরেরবার অন্য কিছু better করবো নে :3</p>
+      <p>আমি আসলে ভেবেছিলাম অনেক কিছু লিখবো, কিন্তু এখন কিছুই মাথায় আসছে না (average Sabil Islam L) </p>
+    </div>
+  </section>
+  </header>
+
+  <section id="quotes">
+    <h2 onclick="toggleSection('quote-content')">Quote Log?</h2>
+    <p>(আমি ভেবেছিলাম যে সুন্দর সুন্দর আমাদের Quote দিবো এখানে, কিন্তু turns out আমি এতটা romantic না 🐸)</p>
+    <div id="quote-content">
+      <p id="quote-text">"Fool এর পক্ষ থেকে আমার <del>ফুলের </del> মিষ্টি আলুর জন্য ফুউউউউল :3"</p>
+      <button id="quote-button">ভাল্লাগে নাই, পরেরটা দেখি</button>
+    </div>
+  </section>
+
+  <section id="product-review">
+    <h2 onclick="toggleSection('review-list')">মনা Review</h2>
+    <p>Review of মনা from Sabil</p>
+    <div id="review-list">
+      <ul>
+        <li><strong>Cute</strong></li>
+        <li><strong>Smol</strong></li>
+        <li><strong>নরম</strong></li>
+        <li><strong>গরম</strong></li>
+        <li><strong>নরম-গরম</strong></li>
+        <li><strong>মোতা</strong></li>
+        <li><strong>Cute</strong></li>
+        <li><strong>মাঝে মধ্যে হুট করে রাগ হয়ে যায় :(</strong></li>
+        <li><strong>"এত ডাকি তবু কথা কও না কেন বউ"</strong></li>
+        <li><strong>Oh, did I mention cute?</strong></li>
+        <li><strong>pr0 (meth ccancer)</strong></li>
+      </ul>
+    </div>
+  </section>
+  <section id="gallery1">
+    <h2 onclick="toggleSection('gallery1-content')">মিম</h2>
+    <p>এখানে আমাদের সুন্দর সুন্দর ছবি থাকার কথা, কিন্তু যেগুলা এখনো exist করে না :( তাই মিম দিলাম কয়েকটা :v </p>
+    <div id="gallery1-content">
+      <img src="./assets/meme1.png" alt="Meme 1">
+      <img src="./assets/meme2.png" alt="Meme 2">
+      <img src="./assets/meme3.png" alt="Meme 3">
+      <img src="./assets/meme4.png" alt="Meme 4">
+      <img src="./assets/meme5.png" alt="Meme 5">
+      <img src="./assets/meme6.png" alt="Meme 6">
+    </div>
+  </section>
+  <section id="gallery2">
+    <h2 onclick="toggleSection('gallery2-content')">ফুউউউউউল :3</h2>
+    <p>তোমার জন্য আগে আনা কিছু ফুলের ছবি :3</p>
+    <div id="gallery2-content">
+      <img src="./assets/ful1.jpg" alt="ful 1">
+      <img src="./assets/ful2.jpg" alt="ful 2">
+      <img src="./assets/ful3.jpg" alt="ful 3">
+      <img src="./assets/ful4.jpg" alt="ful 4">
+    </div>
+  </section>
+  <section id="game">
+    <h2 onclick="toggleSection('game-content')">Social Credit stonks</h2>
+    <p>Balloon ফাটিয়ে <a href="https://www.youtube.com/watch?v=2IszQhHhow8&ab_channel=LessonsinMemeCulture">Social credit</a> earn করুন।</p>
+    <div id="game-content">
+      <div id="canvas-holder-notification">
+        <div id="canvas-holder"></div>
+        <div id="notification-window"></div>
+      </div>
+      <div id="score">
+        <div>Hunger: <div id="hunger-bar"><div id="hunger-fill"></div></div></div>
+        <div>Health: <div id="health-bar"><div id="health-fill"></div></div></div>
+        <div>Social Credits: <div id="credits-bar"><div id="credits-fill"></div></div></div>
+        <div id="credits">Social Credits: 150</div>
+      </div>
+      <div id="artifact-inventory">Artifacts: None</div>
+      <div id="game-buttons">
+        <button id="run-balloon-button" onclick="runBalloonGame()">Run Game</button>
+        <button id="pause-balloon-button" onclick="pauseBalloonGame()" style="display: none;">Pause Game</button>
+        <button id="restart-balloon-button" onclick="resetBalloonGame()">Restart Game</button>
+      </div>
+    </div>
+  </section>
+  <section id="pixel-runner">
+    <h2 onclick="toggleSection('runner-content')">Run Sabil Run</h2>
+    <p>সাবিল এক আন্ধা ছেলে। সে তার বাসা থেকে 420 meter দূরে এসে হারায় গেসে। ছেলে এতোই আন্ধা যে এইটুকু রাস্তা নিজে হেঁটে যেতে পারতেসে না। তাকে বাসায় নিয়ে যাও। (ইচ্ছা করেই মোটা বানাইসি ছবিটা। তাছাড়া edit করতে হতো, যেটার সময় নাই এখন) </p>
+    <div id="runner-content">
+      <p id="runner-score">বাসা থেকে দূরত্ব: 420 meters</p>
+      <div id="runner-canvas-holder"></div>
+      <button id="run-runner-button" onclick="runRunnerGame()">চলেন ভাই খেলি</button>
+      <button id="pause-runner-button" onclick="pauseRunnerGame()" style="display: none;">একটু থামেন ভাই</button>
+      <button id="restart-button" onclick="resetRunner()">আবার খেলুম</button>
+      <p id="error-message"></p>
+    </div>
+  </section>
+  <div id="image-modal">
+    <img id="modal-image" src="" alt="Enlarged Photo">
+    <button id="close-modal">Close</button>
+  </div>
+  <script>
+    // Toggle Section
+    function toggleSection(contentId) {
+      const content = document.getElementById(contentId);
+      content.style.display = content.style.display === 'block' ? 'none' : 'block';
+    }
+
+    // Image Modal
+    const modal = document.getElementById('image-modal');
+    const modalImage = document.getElementById('modal-image');
+    const closeModal = document.getElementById('close-modal');
+    const galleryImages = document.querySelectorAll('#gallery1-content img, #gallery2-content img');
+
+    galleryImages.forEach(img => {
+      img.addEventListener('click', () => {
+        modalImage.src = img.src;
+        modalImage.alt = img.alt;
+        modal.style.display = 'flex';
+      });
+    });
+
+    closeModal.addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.style.display === 'flex') {
+        modal.style.display = 'none';
+      }
+    });
+
+    // Countdown Clock
+    function startCountdown() {
+      const birthday = new Date('2025-08-18T00:00:00');
+      const countdownEl = document.getElementById('countdown');
+      function updateCountdown() {
+        const now = new Date();
+        const timeLeft = birthday - now;
+        if (timeLeft <= 0) {
+          countdownEl.textContent = "Happy Birthday!";
+          confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+          clearInterval(countdownInterval);
+        } else {
+          const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+          const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+          countdownEl.textContent = `${hours}h ${minutes}m ${seconds}s until your birthday!`;
+        }
+      }
+      updateCountdown();
+      const countdownInterval = setInterval(updateCountdown, 1000);
+    }
+    startCountdown();
+
+    // Quotes Carousel
+    const quotes = [
+      "Fool এর পক্ষ থেকে আমার ফুলের মিষ্টি আলুর জন্য ফুউউউউল :3",
+      "আমার মিষ্টি আলু :3",
+      "তুমি তো আমার কাঠি",
+      "আমার smol ফুল",
+      "🐸"
+    ];
+    let currentQuote = 0;
+    const quoteText = document.getElementById('quote-text');
+    const quoteButton = document.getElementById('quote-button');
+    quoteButton.addEventListener('click', () => {
+      currentQuote = (currentQuote + 1) % quotes.length;
+      quoteText.textContent = quotes[currentQuote];
+    });
+
+    // Balloon Pop Game (p5.js instance mode)
+    let balloonPop = null;
+    let balloonGameRunning = false;
+    function runBalloonGame() {
+      if (!balloonPop) {
+        balloonPop = new p5(function(p) {
+          let balloons = [], hunger = 15, health = 15, socialCredits = 150, gameOver = false, gameWon = false;
+          let availableArtifacts = ["Books", "Catto", "Karl Marx", "Wall Painting", "Sabil’s Brain"];
+          let collectedArtifacts = [];
+          let paused = false;
+          p.setup = function() {
+            let canvas = p.createCanvas(400, 400);
+            canvas.parent('canvas-holder');
+            for (let i = 0; i < 5; i++) {
+              balloons.push({
+                x: p.random(p.width),
+                y: p.random(p.height, p.height + 100),
+                r: 20,
+                speed: p.random(1, 3),
+                color: p.color(p.random(255), p.random(255), p.random(255)),
+                item: getRandomItem()
+              });
+            }
+            updateBars();
+          };
+          function getRandomItem() {
+            let rand = p.random(100);
+            let artifactChance = availableArtifacts.length > 0 ? 2 : 0;
+            let artifactSubChances = { "Books": 50, "Catto": 25, "Karl Marx": 12.5, "Wall Painting": 8.33, "Sabil’s Brain": 4.17 };
+            let totalArtifactChance = Object.values(artifactSubChances).reduce((a, b) => a + b, 0);
+            if (rand < 40) { // Food: 40%
+              let foodRand = p.random(100);
+              if (foodRand < 40) return { type: "food", name: "Broccoli", value: 3 };
+              if (foodRand < 70) return { type: "food", name: "Mutton", value: 5 };
+              if (foodRand < 90) return { type: "food", name: "Cat food", value: 1 };
+              return { type: "food", name: "Sabil", value: 10 };
+            } else if (rand < 65) { // Health Positive: 25%
+              let healthRand = p.random(100);
+              if (healthRand < 40) return { type: "health", name: "Pat-pat", value: 1 };
+              if (healthRand < 80) return { type: "health", name: "Hug", value: 2 };
+              return { type: "health", name: "Kiss", value: 5 };
+            } else if (rand < 77) { // Bonk: 12%
+              return { type: "bonk", name: "Bonk", value: Math.floor(p.random(1, 11)) };
+            } else if (rand < 87) { // Stone: 10%
+              return { type: "stone", name: "Stone", value: -5 };
+            } else if (rand < 90) { // Mine: 3%
+              return { type: "mine", name: "Mine", value: 0 };
+            } else if (rand < 98) { // Social Credits Only: 8%
+              return { type: "credits", name: "Social Credits", value: Math.floor(p.random(-100, 1)) };
+            } else if (artifactChance > 0) { // Artifacts: 2%
+              let artifactRand = p.random(totalArtifactChance);
+              let cumulative = 0;
+              for (let artifact in artifactSubChances) {
+                cumulative += artifactSubChances[artifact];
+                if (artifactRand < cumulative && availableArtifacts.includes(artifact)) {
+                  return { type: "artifact", name: artifact, value: 50 };
+                }
+              }
+            }
+            return { type: "credits", name: "Social Credits", value: Math.floor(p.random(-100, 1)) }; // Fallback
+          }
+          function addNotification(message) {
+            let notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.innerHTML = message;
+            let window = document.getElementById('notification-window');
+            window.appendChild(notification);
+            window.scrollTop = window.scrollHeight;
+          }
+          function updateInventory() {
+            let inventory = document.getElementById('artifact-inventory');
+            inventory.textContent = collectedArtifacts.length > 0 ? `Artifacts: ${collectedArtifacts.join(', ')}` : 'Artifacts: None';
+          }
+          function updateBars() {
+            document.getElementById('hunger-fill').style.width = `${(Math.min(hunger, 20) / 20) * 100}%`;
+            document.getElementById('health-fill').style.width = `${(Math.min(health, 20) / 20) * 100}%`;
+            document.getElementById('credits-fill').style.width = `${(Math.max(Math.min(socialCredits, 420), 0) / 420) * 100}%`;
+            document.getElementById('credits').textContent = `Social Credits: ${socialCredits}`;
+          }
+          function wrapText(text, maxWidth, x, y, lineHeight) {
+            let words = text.split(' ');
+            let line = '';
+            let lines = [];
+            for (let i = 0; i < words.length; i++) {
+              let testLine = line + words[i] + ' ';
+              let testWidth = p.textWidth(testLine);
+              if (testWidth > maxWidth && line !== '') {
+                lines.push(line);
+                line = words[i] + ' ';
+              } else {
+                line = testLine;
+              }
+            }
+            lines.push(line);
+            for (let i = 0; i < lines.length; i++) {
+              p.text(lines[i], x, y + i * lineHeight);
+            }
+          }
+          p.draw = function() {
+            if (!balloonGameRunning || paused) {
+              p.background(220);
+              p.fill('#ff85c2');
+              p.textSize(20);
+              p.textAlign(p.CENTER, p.CENTER);
+              p.text(paused ? 'Game Paused' : 'Click Run Game to Start', p.width / 2, p.height / 2);
+              return;
+            }
+            p.background(220);
+            if (gameOver) {
+              p.fill('#ff85c2');
+              p.textSize(16);
+              p.textAlign(p.CENTER, p.CENTER);
+              wrapText('You failed, comrade. You have disappointed the union. You will be sent to gulag', p.width - 40, p.width / 2, p.height / 2, 20);
+              return;
+            }
+            if (gameWon) {
+              p.fill('#ff85c2');
+              p.textSize(16);
+              p.textAlign(p.CENTER, p.CENTER);
+              wrapText('Well done, comrade. You will not be sent gulag this time. See you... until next time...', p.width - 40, p.width / 2, p.height / 2, 20);
+              return;
+            }
+            for (let i = balloons.length - 1; i >= 0; i--) {
+              let b = balloons[i];
+              p.fill(b.color);
+              p.ellipse(b.x, b.y, b.r * 2);
+              b.y -= b.speed;
+              if (b.y < -b.r) {
+                balloons.splice(i, 1);
+                balloons.push({
+                  x: p.random(p.width),
+                  y: p.height + b.r,
+                  r: 20,
+                  speed: p.random(1, 3),
+                  color: p.color(p.random(255), p.random(255), p.random(255)),
+                  item: getRandomItem()
+                });
+              }
+            }
+            updateBars();
+          };
+          p.mousePressed = function() {
+            if (!balloonGameRunning || paused || gameOver || gameWon) return;
+            for (let i = balloons.length - 1; i >= 0; i--) {
+              let b = balloons[i];
+              let d = p.dist(p.mouseX, p.mouseY, b.x, b.y);
+              if (d < b.r) {
+                hunger -= 1;
+                let credits = Math.floor(p.random(-50, 51));
+                socialCredits += credits;
+                let message = credits >= 0 ? `+${credits} Credits` : `Lazy workers like you must be punished severely. There is no scope of laziness in our great union <span>(${credits} Credits)</span>`;
+                if (b.item.type === "food") {
+                  hunger = Math.min(hunger + b.item.value, 20);
+                  if (b.item.name === "Broccoli") {
+                    message = `You got a delicious vegetable treat, Broccoli! <span>(Hunger increased by ${b.item.value} points)</span>`;
+                  } else if (b.item.name === "Mutton") {
+                    message = `You found yourself some protein 💪 <span>(Hunger increased by ${b.item.value} points)</span>`;
+                  } else if (b.item.name === "Cat food") {
+                    message = `Why are you eating cat food bruh <span>(Hunger increased by ${b.item.value} points)</span>`;
+                  } else if (b.item.name === "Sabil") {
+                    message = `You found Sabil. Yum <span>(Hunger increased by ${b.item.value} points)</span>`;
+                  }
+                } else if (b.item.type === "health") {
+                  health = Math.min(health + b.item.value, 20);
+                  if (b.item.name === "Pat-pat") {
+                    message = `Sabil head patted you :3 <span>(Health increased by ${b.item.value} points)</span>`;
+                  } else if (b.item.name === "Hug") {
+                    message = `Looks like someone's having a hard time. *Sabil Hugs* <span>(Health increased by ${b.item.value} points)</span>`;
+                  } else if (b.item.name === "Kiss") {
+                    message = `*Sabil Kisses* <span>(Health increased by ${b.item.value} points)</span>`;
+                  }
+                } else if (b.item.type === "bonk") {
+                  health -= b.item.value;
+                  message = `You got bonked ${b.item.value} times by Sabil <span>(Health decreased by ${b.item.value} points)</span>`;
+                } else if (b.item.type === "stone") {
+                  health += b.item.value;
+                  message = `Why did you punch the stone? <span>(Health decreased by 5 points)</span>`;
+                } else if (b.item.type === "mine") {
+                  gameOver = true;
+                  message = `Comrade, you stepped on a mine and blew away. The union will remember you <span>(Game Over)</span>`;
+                } else if (b.item.type === "credits") {
+                  socialCredits += b.item.value;
+                  message = b.item.value >= 0 ? 
+                    `Comrade, you are awarded for your hard work. Hard work by workers like you prospers our land and help to ensure peace, bread and land in our union. Long live the workers <span>(+${b.item.value} Credits)</span>` : 
+                    `Lazy workers like you must be punished severely. There is no scope of laziness in our great union <span>(${b.item.value} Credits)</span>`;
+                } else if (b.item.type === "artifact") {
+                  socialCredits += b.item.value;
+                  collectedArtifacts.push(b.item.name);
+                  availableArtifacts.splice(availableArtifacts.indexOf(b.item.name), 1);
+                  if (b.item.name === "Books") {
+                    message = `Comrade, knowledge is crucial for political consciousness. <span>(You found ${b.item.name})</span>`;
+                  } else if (b.item.name === "Catto") {
+                    message = `You found a feline friend :3 😸 <span>(You found ${b.item.name})</span>`;
+                  } else if (b.item.name === "Karl Marx") {
+                    message = `Comrade, you have found one of the greatest mind who has ever walked this planet. You can learn about communism from the man himself now. The union is proud of you <span>(You found ${b.item.name})</span>`;
+                  } else if (b.item.name === "Wall Painting") {
+                    message = `Aaaaaaaart <span>(You found ${b.item.name})</span>`;
+                  } else if (b.item.name === "Sabil’s Brain") {
+                    message = `It's useless anyways <span>(You found ${b.item.name})</span>`;
+                  }
+                }
+                if (hunger <= 0) {
+                  gameOver = true;
+                  message = `Comrade, you didn't work hard and died of your own negligence. Or maybe it was the capitalistic ideas that were roaming in your head. Diet is good for health, but in moderation <span>(Game Over)</span>`;
+                } else if (health <= 0) {
+                  gameOver = true;
+                  message = `The union tried its best with the finest healthcare in the world to help you. You and your working spirit will be remembered by the union... <span>(Game Over)</span>`;
+                } else if (socialCredits < 0) {
+                  gameOver = true;
+                  message = `You failed, comrade. You have disappointed the union. You will be sent to gulag <span>(Game Over)</span>`;
+                }
+                addNotification(message);
+                balloons.splice(i, 1);
+                balloons.push({
+                  x: p.random(p.width),
+                  y: p.height + 20,
+                  r: 20,
+                  speed: p.random(1, 3),
+                  color: p.color(p.random(255), p.random(255), p.random(255)),
+                  item: getRandomItem()
+                });
+                if (hunger <= 0 || health <= 0 || b.item.type === "mine" || socialCredits < 0) {
+                  gameOver = true;
+                }
+                if (socialCredits >= 420) {
+                  gameWon = true;
+                }
+                updateBars();
+                break;
+              }
+            }
+          };
+          window.runBalloonGame = function() {
+            balloonGameRunning = true;
+            paused = false;
+            document.getElementById('run-balloon-button').style.display = 'none';
+            document.getElementById('pause-balloon-button').style.display = 'inline-block';
+          };
+          window.pauseBalloonGame = function() {
+            paused = true;
+            document.getElementById('run-balloon-button').style.display = 'inline-block';
+            document.getElementById('pause-balloon-button').style.display = 'none';
+          };
+          window.resetBalloonGame = function() {
+            hunger = 15;
+            health = 15;
+            socialCredits = 150;
+            gameOver = false;
+            gameWon = false;
+            paused = false;
+            availableArtifacts = ["Books", "Catto", "Karl Marx", "Wall Painting", "Sabil’s Brain"];
+            collectedArtifacts = [];
+            balloons = [];
+            for (let i = 0; i < 5; i++) {
+              balloons.push({
+                x: p.random(p.width),
+                y: p.random(p.height, p.height + 100),
+                r: 20,
+                speed: p.random(1, 3),
+                color: p.color(p.random(255), p.random(255), p.random(255)),
+                item: getRandomItem()
+              });
+            }
+            document.getElementById('notification-window').innerHTML = '';
+            document.getElementById('run-balloon-button').style.display = 'inline-block';
+            document.getElementById('pause-balloon-button').style.display = 'none';
+            updateInventory();
+            updateBars();
+          };
+        });
+      } else {
+        balloonGameRunning = true;
+        document.getElementById('run-balloon-button').style.display = 'none';
+        document.getElementById('pause-balloon-button').style.display = 'inline-block';
+      }
+    }
+
+    // Pixel Runner Game (p5.js instance mode)
+    let pixelRunner = null;
+    let runnerGameRunning = false;
+    function runRunnerGame() {
+      if (!pixelRunner) {
+        pixelRunner = new p5(function(p) {
+          let player, obstacles = [], runnerScore = 420, gameOver = false, gameWon = false;
+          let dinoRun = [], dinoStationary, dinoLose, currentFrame = 0, lastSpawnTime = 0;
+          let imagesLoaded = true;
+          let aspectRatio = 1;
+          let paused = false;
+          p.preload = function() {
+            try {
+              for (let i = 0; i < 10; i++) {
+                dinoRun[i] = p.loadImage(`./assets/dino-run-${i}.png`);
+              }
+              dinoStationary = p.loadImage(`./assets/dino-stationary.png`);
+              dinoLose = p.loadImage(`./assets/dino-lose.png`);
+              dinoRun[0].loadPixels();
+              aspectRatio = dinoRun[0].height / dinoRun[0].width;
+            } catch (e) {
+              imagesLoaded = false;
+              document.getElementById('error-message').textContent = 'Error loading images. Ensure ./assets/ folder is correct and run via a local server.';
+            }
+          };
+          p.setup = function() {
+            let canvas = p.createCanvas(600, 200);
+            canvas.parent('runner-canvas-holder');
+            p.imageMode(p.CORNER);
+            if (imagesLoaded) {
+              player = { x: p.width - 50, y: p.height - 50 * aspectRatio, w: 50, h: 50 * aspectRatio, vy: 0, jumping: false };
+              let newH = p.random(15, 30);
+              obstacles.push({ x: 0, y: p.height - newH, w: p.random(15, 30), h: newH, speed: 3 });
+              lastSpawnTime = p.millis();
+            }
+          };
+          p.draw = function() {
+            if (!runnerGameRunning || paused) {
+              p.background(0);
+              p.fill('#ff85c2');
+              p.textSize(20);
+              p.textAlign(p.CENTER, p.CENTER);
+              p.text(paused ? 'Game Paused' : 'Click Run Game to Start', p.width / 2, p.height / 2);
+              return;
+            }
+            p.background(0);
+            if (!imagesLoaded) {
+              p.fill('#ff85c2');
+              p.textSize(20);
+              p.textAlign(p.CENTER, p.CENTER);
+              p.text('Image loading failed. Check console and use a local server.', p.width / 2, p.height / 2);
+              return;
+            }
+            if (!gameOver && !gameWon) {
+              player.y += player.vy;
+              player.vy += 0.5;
+              if (player.y > p.height - player.h) {
+                player.y = p.height - player.h;
+                player.vy = 0;
+                player.jumping = false;
+              }
+              if (player.jumping) {
+                p.image(dinoStationary, player.x, player.y, player.w, player.h);
+              } else {
+                let frameIndex = Math.floor(currentFrame / 5) % 10;
+                p.image(dinoRun[frameIndex], player.x, player.y, player.w, player.h);
+                currentFrame++;
+              }
+              let canSpawn = true;
+              let minSeparation = 150;
+              let spawnCooldown = minSeparation / 3 * 1000 / 60;
+              if (p.millis() - lastSpawnTime < spawnCooldown) {
+                canSpawn = false;
+              }
+              if (p.random() < 0.02 && canSpawn) {
+                let newH = p.random(15, 30);
+                obstacles.push({ x: 0, y: p.height - newH, w: p.random(15, 30), h: newH, speed: 3 });
+                lastSpawnTime = p.millis();
+              }
+              for (let i = obstacles.length - 1; i >= 0; i--) {
+                let o = obstacles[i];
+                o.x += 3;
+                p.fill('#ffd700');
+                p.rect(o.x, o.y, o.w, o.h);
+                if (o.x + o.w > p.width) {
+                  obstacles.splice(i, 1);
+                }
+                let playerLeft = player.x;
+                let playerRight = player.x + player.w;
+                let playerTop = player.y;
+                let playerBottom = player.y + player.h;
+                let obstacleLeft = o.x;
+                let obstacleRight = o.x + o.w;
+                let obstacleTop = o.y;
+                let obstacleBottom = o.y + o.h;
+                if (playerRight > obstacleLeft && playerLeft < obstacleRight && playerBottom > obstacleTop && playerTop < obstacleBottom) {
+                  console.log("Collision detected!");
+                  gameOver = true;
+                }
+              }
+              runnerScore -= 0.1;
+              if (runnerScore <= 0) {
+                runnerScore = 0;
+                gameWon = true;
+              }
+              document.getElementById('runner-score').textContent = `বাসা থেকে দূরত্ব: ${Math.ceil(runnerScore)} meters`;
+            } else if (gameOver) {
+              p.image(dinoLose, player.x, player.y, player.w, player.h);
+              p.fill('#ff85c2');
+              p.textSize(20);
+              p.textAlign(p.CENTER, p.CENTER);
+              p.text('নাহ, এই মেয়ে নিজেও আন্ধা। আমাদের কত্তো মিইইইইল! \n (Game Over! Click "আবার খেলুম" to try again.)', p.width / 2, p.height / 2);
+            } else if (gameWon) {
+              p.image(dinoStationary, player.x, player.y, player.w, player.h);
+              p.fill('#ff85c2');
+              p.textSize(20);
+              p.textAlign(p.CENTER, p.CENTER);
+              p.text('বাসায় এনে দেয়ার জন্য thamku! Click "আবার খেলুম" to play again.', p.width / 2, p.height / 2);
+            }
+          };
+          p.keyPressed = function() {
+            if (p.keyCode === 32 && !player.jumping && !gameOver && !gameWon && imagesLoaded && !paused && runnerGameRunning) {
+              player.vy = -10;
+              player.jumping = true;
+            }
+          };
+          window.runRunnerGame = function() {
+            runnerGameRunning = true;
+            paused = false;
+            document.getElementById('run-runner-button').style.display = 'none';
+            document.getElementById('pause-runner-button').style.display = 'inline-block';
+          };
+          window.pauseRunnerGame = function() {
+            paused = true;
+            document.getElementById('run-runner-button').style.display = 'inline-block';
+            document.getElementById('pause-runner-button').style.display = 'none';
+          };
+          window.resetRunner = function() {
+            if (!imagesLoaded) return;
+            runnerScore = 420;
+            gameOver = false;
+            gameWon = false;
+            paused = false;
+            let newH = p.random(15, 30);
+            obstacles = [{ x: 0, y: p.height - newH, w: p.random(15, 30), h: newH, speed: 3 }];
+            lastSpawnTime = p.millis();
+            player = { x: p.width - 50, y: p.height - 50 * aspectRatio, w: 50, h: 50 * aspectRatio, vy: 0, jumping: false };
+            currentFrame = 0;
+            document.getElementById('runner-score').textContent = `বাসা থেকে দূরত্ব: 420 meters`;
+            document.getElementById('run-runner-button').style.display = 'inline-block';
+            document.getElementById('pause-runner-button').style.display = 'none';
+          };
+        });
+      } else {
+        runnerGameRunning = true;
+        document.getElementById('run-runner-button').style.display = 'none';
+        document.getElementById('pause-runner-button').style.display = 'inline-block';
+      }
+    }
+  </script>
+</body>
+</html>
