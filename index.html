@@ -49,7 +49,7 @@
       margin: 15px auto;
       width: 100%;
       padding: 20px;
-      background-image: url("./assets/komi.png");
+      background-image: url("komi.png");
       border-radius: 10px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);      
     }
@@ -367,21 +367,21 @@
     <p>এখানে আমাদের সুন্দর সুন্দর ছবি থাকার কথা, কিন্তু যেগুলা এখনো exist করে না :( তাই মিম দিলাম কয়েকটা :v </p>
     <div id="gallery1-content">
       <img src="meme1.png" alt="Meme 1">
-      <img src="./assets/meme2.png" alt="Meme 2">
-      <img src="./assets/meme3.png" alt="Meme 3">
-      <img src="./assets/meme4.png" alt="Meme 4">
-      <img src="./assets/meme5.png" alt="Meme 5">
-      <img src="./assets/meme6.png" alt="Meme 6">
+      <img src="meme2.png" alt="Meme 2">
+      <img src="meme3.png" alt="Meme 3">
+      <img src="meme4.png" alt="Meme 4">
+      <img src="meme5.png" alt="Meme 5">
+      <img src="meme6.png" alt="Meme 6">
     </div>
   </section>
   <section id="gallery2">
     <h2 onclick="toggleSection('gallery2-content')">ফুউউউউউল :3</h2>
     <p>তোমার জন্য আগে আনা কিছু ফুলের ছবি :3</p>
     <div id="gallery2-content">
-      <img src="./assets/ful1.jpg" alt="ful 1">
-      <img src="./assets/ful2.jpg" alt="ful 2">
-      <img src="./assets/ful3.jpg" alt="ful 3">
-      <img src="./assets/ful4.jpg" alt="ful 4">
+      <img src="ful1.jpg" alt="ful 1">
+      <img src="ful2.jpg" alt="ful 2">
+      <img src="ful3.jpg" alt="ful 3">
+      <img src="ful4.jpg" alt="ful 4">
     </div>
   </section>
   <section id="game">
@@ -789,15 +789,15 @@
           p.preload = function() {
             try {
               for (let i = 0; i < 10; i++) {
-                dinoRun[i] = p.loadImage(`./assets/dino-run-${i}.png`);
+                dinoRun[i] = p.loadImage(`dino-run-${i}.png`);
               }
-              dinoStationary = p.loadImage(`./assets/dino-stationary.png`);
-              dinoLose = p.loadImage(`./assets/dino-lose.png`);
+              dinoStationary = p.loadImage(`dino-stationary.png`);
+              dinoLose = p.loadImage(`dino-lose.png`);
               dinoRun[0].loadPixels();
               aspectRatio = dinoRun[0].height / dinoRun[0].width;
             } catch (e) {
               imagesLoaded = false;
-              document.getElementById('error-message').textContent = 'Error loading images. Ensure ./assets/ folder is correct and run via a local server.';
+              document.getElementById('error-message').textContent = 'Error loading images. Ensure  folder is correct and run via a local server.';
             }
           };
           p.setup = function() {
@@ -938,6 +938,7 @@
 </body>
 
 </html>
+
 
 
 
