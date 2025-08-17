@@ -459,28 +459,50 @@
       }
     });
 
-    // Countdown Clock
-    function startCountdown() {
-      const birthday = new Date('2025-08-18T00:00:00');
-      const countdownEl = document.getElementById('countdown');
-      function updateCountdown() {
-        const now = new Date();
-        const timeLeft = birthday - now;
-        if (timeLeft <= 0) {
-          countdownEl.textContent = "Happy Birthday!";
-          confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-          clearInterval(countdownInterval);
-        } else {
-          const hours = Math.floor(timeLeft / (1000 * 60 * 60));
-          const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-          const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-          countdownEl.textContent = `${hours}h ${minutes}m ${seconds}s until your birthday!`;
-        }
+  // Countdown
+    const targetDate = new Date("August 17, 2025 00:00:00").getTime();
+    let countdownInterval; // Declare before use
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      document.getElementById('countdown').innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+      if (distance < 0) {
+        clearInterval(countdownInterval);
+        document.getElementById('countdown').innerHTML = "Happy Birthday!";
+        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
       }
-      updateCountdown();
-      const countdownInterval = setInterval(updateCountdown, 1000);
+    }
+    function startCountdown() {
+      countdownInterval = setInterval(updateCountdown, 1000);
     }
     startCountdown();
+    
+    // Countdown Clock
+    // function startCountdown() {
+    //   const birthday = new Date('2025-08-18T00:00:00');
+    //   const countdownEl = document.getElementById('countdown');
+    //   function updateCountdown() {
+    //     const now = new Date();
+    //     const timeLeft = birthday - now;
+    //     if (timeLeft <= 0) {
+    //       countdownEl.textContent = "Happy Birthday!";
+    //       confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+    //       clearInterval(countdownInterval);
+    //     } else {
+    //       const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+    //       const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+    //       const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+    //       countdownEl.textContent = `${hours}h ${minutes}m ${seconds}s until your birthday!`;
+    //     }
+    //   }
+    //   updateCountdown();
+    //   const countdownInterval = setInterval(updateCountdown, 1000);
+    // }
+    // startCountdown();
 
     // Quotes Carousel
     const quotes = [
@@ -938,6 +960,7 @@
 </body>
 
 </html>
+
 
 
 
